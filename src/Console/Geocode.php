@@ -28,9 +28,9 @@ class Geocode extends Command
      */
     public function handle()
     {
-        $result = app(Geocoder::class)->geocode( $this->input('address') );
+        $result = app(Geocoder::class)->geocode( $this->argument('address') );
 
-        $this->info('Geocoding Results for Query: ' . $this->input('address'));
+        $this->info('Geocoding Results for Query: ' . $this->argument('address'));
         $this->info('Lat: ' . $result->getLat());
         $this->info('Lng: ' . $result->getLng());
     }

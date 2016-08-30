@@ -12,7 +12,7 @@ class ReverseGeocode extends Command
      *
      * @var string
      */
-    protected $signature = 'geocoder:reverse-geocode {lat} {lng}';
+    protected $signature = 'geocoder:reverse-geocode {latlng : <lat>,<lng>}';
 
     /**
      * The console command description.
@@ -28,9 +28,11 @@ class ReverseGeocode extends Command
      */
     public function handle()
     {
-        $result = app(Geocoder::class)->reverseGeocode( $this->input('lat'), $this->input('lng') );
+        list($lat, $lng) = explode(',', $this->argument('latlng'));
 
-        $this->info('Geocoding Results for Lat/Lng: ' . $this->input('lat') .'/'. $this->input('lng'));
+        $result = app(Geocoder::class)->reverseGeocode( $lat, $lng );
+
+        $this->info('Geocoding Results for Lat/Lng: ' . $lat .'/'. $lng);
         $this->info('Address: ' . $result->getFormattedAddress());
     }
 }
