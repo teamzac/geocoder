@@ -2,7 +2,7 @@
 
 namespace TeamZac\Geocoder\Facades;
 
-use TeamZac\Geocoder\Geocoder;
+use TeamZac\Geocoder\Geocoder as ConcreteGeocoder;
 use Illuminate\Support\Facades\Facade;
 
 class Geocoder extends Facade
@@ -12,5 +12,5 @@ class Geocoder extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return Geocoder::class; }
+    protected static function getFacadeAccessor() { return ConcreteGeocoder::class; }
 }
