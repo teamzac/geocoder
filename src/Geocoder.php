@@ -23,7 +23,7 @@ class Geocoder
     /**
      * Geocode the given address
      *
-     * @param string $adress
+     * @param string $address
      * @return this
      */
     public function geocode($address='')
@@ -37,8 +37,9 @@ class Geocoder
     /**
      * Reverse geocode given the latitude/longitude pair
      *
-     * @param type var Description
-     * @return this
+     * @param   double $lat
+     * @param   double $lng
+     * @return  this
      */
     public function reverseGeocode($lat, $lng)
     {

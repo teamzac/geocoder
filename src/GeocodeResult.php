@@ -71,4 +71,10 @@ class GeocodeResult
             }
         }
     }
+
+    public function __get($key) {
+        if ( isset($this->result->{$key}) ) {
+            return $this->result->{$key};
+        }
+    }
 }
