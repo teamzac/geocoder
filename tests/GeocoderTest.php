@@ -3,7 +3,7 @@
 use TeamZac\Geocoder\Geocoder;
 use TeamZac\Geocoder\GeocodeResult;
 
-class GeocoderTest extends PHPUnit_Framework_TestCase
+class GeocoderTest extends PHPUnit\Framework\TestCase
 {
     protected $apiKey;
 
@@ -20,8 +20,8 @@ class GeocoderTest extends PHPUnit_Framework_TestCase
 
         $this->queryAddress = '1600 Pennsylvania Avenue, Washington, DC 20500';
 
-        $this->queryLat = 38.8976094;
-        $this->queryLng = -77.0367349;
+        $this->queryLat = 38.8976633;
+        $this->queryLng = -77.0365739;
     }
 
     /** @test */
@@ -40,7 +40,14 @@ class GeocoderTest extends PHPUnit_Framework_TestCase
     /** @test */
     function it_reverse_geocodes_a_lat_lng_pair()
     {
+        $geocoder = new Geocoder($this->apiKey);
 
+        $results = $geocoder->reverseGeocode($this->queryLat, $this->queryLng);
+
+        $this->assertTrue($results instanceof GeocodeResult);
+
+        $this->assertEquals($this->queryLat, $results->getLat());
+        $this->assertEquals($this->queryLng, $results->getLng());
     }
 
 }
