@@ -4,7 +4,7 @@ namespace TeamZac\Geocoder;
 
 use GuzzleHttp\Client;
 
-class Geocoder
+class PlaceDetails
 {
     protected $apiKey;
 
@@ -21,32 +21,15 @@ class Geocoder
     }
 
     /**
-     * Geocode the given address
-     *
-     * @param string $address
+     * Get the details of the place ID
+     * 
+     * @param string $placeId
      * @return this
      */
-    public function geocode($address='')
+    public function getDetails($placeId)
     {
         $this->query = [
-            'address' => $address,
-            'key' => $this->apiKey,
-        ];
-        return $this->getResults();
-    }
-
-    /**
-     * Reverse geocode given the latitude/longitude pair
-     *
-     * @param   double $lat
-     * @param   double $lng
-     * @return  this
-     */
-    public function reverseGeocode($lat, $lng)
-    {
-        $this->query = [
-            'latlng' => "{$lat},{$lng}",
-            'key' => $this->apiKey
+            'placeid' => $placeId
         ];
         return $this->getResults();
     }
@@ -60,7 +43,7 @@ class Geocoder
     private function getResults()
     {
         $client = new Client([
-            'base_uri' => 'https://maps.googleapis.com/maps/api/geocode/json',
+            'base_uri' => 'https://maps.googleapis.com/maps/api/place/details/json',
             'timeout'  => 10.0,
             'stream' => false,
         ]);
@@ -76,7 +59,7 @@ class Geocoder
 
         if ( $response->getStatusCode() >= 400 )
         {
-            throw new \Exception('Unable to process Geocoding');
+            throw new \Exception('Unable to get place details');
         }
 
         $json = json_decode($response->getBody());

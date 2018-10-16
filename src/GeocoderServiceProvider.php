@@ -40,5 +40,13 @@ class GeocoderServiceProvider extends ServiceProvider
         $this->app->singleton(Geocoder::class, function($app) {
             return new Geocoder( config('geocoder.google_maps_api_key'));
         });
+
+        $this->app->singleton(PlaceSearch::class, function($app) {
+            return new PlaceSearch( config('geocoder.google_maps_api_key'));
+        });
+
+        $this->app->singleton(PlaceDetails::class, function($app) {
+            return new PlaceDetails( config('geocoder.google_maps_api_key'));
+        });
     }
 }

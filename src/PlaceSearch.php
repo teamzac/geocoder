@@ -4,7 +4,7 @@ namespace TeamZac\Geocoder;
 
 use GuzzleHttp\Client;
 
-class Geocoder
+class PlaceSearch
 {
     protected $apiKey;
 
@@ -21,33 +21,24 @@ class Geocoder
     }
 
     /**
-     * Geocode the given address
-     *
-     * @param string $address
-     * @return this
-     */
-    public function geocode($address='')
-    {
-        $this->query = [
-            'address' => $address,
-            'key' => $this->apiKey,
-        ];
-        return $this->getResults();
-    }
-
-    /**
-     * Reverse geocode given the latitude/longitude pair
+     * Search for places around a lat/lng and radius
      *
      * @param   double $lat
      * @param   double $lng
-     * @return  this
+     * @param   integer $radius (meters)
+     * @return this
      */
-    public function reverseGeocode($lat, $lng)
+    public function search($lat, $lng, $keyword = null, $radius = 1000)
     {
         $this->query = [
-            'latlng' => "{$lat},{$lng}",
-            'key' => $this->apiKey
+            'location' => sprintf("%s,%s", $lat, $lng),
+            'radius' => $radius
         ];
+
+        if ( $keyword ) {
+            $this->query['keyword'] = $keyword;
+        }
+
         return $this->getResults();
     }
 
@@ -60,7 +51,7 @@ class Geocoder
     private function getResults()
     {
         $client = new Client([
-            'base_uri' => 'https://maps.googleapis.com/maps/api/geocode/json',
+            'base_uri' => 'https://maps.googleapis.com/maps/api/place/nearbysearch/json',
             'timeout'  => 10.0,
             'stream' => false,
         ]);
@@ -76,7 +67,7 @@ class Geocoder
 
         if ( $response->getStatusCode() >= 400 )
         {
-            throw new \Exception('Unable to process Geocoding');
+            throw new \Exception('Unable to get place details');
         }
 
         $json = json_decode($response->getBody());
