@@ -36,6 +36,11 @@ class GeocodeResult
         return $this->getValueForKey('administrative_area_level_1');
     }
 
+    public function getCountry()
+    {
+        return $this->getValueForKey('country');
+    }
+
     public function getPostalCode()
     {
         return $this->getValueForKey('postal_code');
