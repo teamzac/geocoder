@@ -6,8 +6,10 @@ use GuzzleHttp\Client;
 
 class Geocoder
 {
+    /** @var string */
     protected $apiKey;
 
+    /** @var array */
     private $query;
 
     /**
@@ -54,35 +56,49 @@ class Geocoder
     /**
      * Query the geocoding service (Google)
      *
-     * @param 
      * @return GeocodingResult
      */
-    private function getResults()
+    protected function getResults()
     {
-        $client = new Client([
-            'base_uri' => 'https://maps.googleapis.com/maps/api/geocode/json',
-            'timeout'  => 10.0,
-            'stream' => false,
-        ]);
+        $apiResponse = $this->performQuery();
+        
+        return (new GeocodeResult)
+            ->setResults(count($apiResponse->results) ? $apiResponse->results[0] : null);
+    }
 
-        $queryString =  http_build_query($this->query);
-
-        $response = $client->get('', [
+    /**
+     * Query the API service
+     * 
+     * @return  JSON parsed object
+     * @throws  Exception
+     */
+    protected function performQuery()
+    {
+        $response = $this->http()->get('', [
             'headers' => [
                 'Accept'     => 'application/json',
             ],
             'query' => $this->query,
         ]);
 
-        if ( $response->getStatusCode() >= 400 )
-        {
+        if ( $response->getStatusCode() >= 400 ) {
             throw new \Exception('Unable to process Geocoding');
         }
 
-        $json = json_decode($response->getBody());
-        
-        $geocodingResult = new GeocodeResult;
-        $geocodingResult->setResults( count($json->results) ? $json->results[0] : null );
-        return $geocodingResult;
+        return json_decode($response->getBody());;
+    }
+
+    /**
+     * Create the HTTP client
+     * 
+     * @return  GuzzleHttp\Client
+     */
+    protected function http()
+    {
+        return new Client([
+            'base_uri' => 'https://maps.googleapis.com/maps/api/geocode/json',
+            'timeout'  => 10.0,
+            'stream' => false,
+        ]);
     }
 }

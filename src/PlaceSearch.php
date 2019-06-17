@@ -6,8 +6,10 @@ use GuzzleHttp\Client;
 
 class PlaceSearch
 {
+    /** @var string */
     protected $apiKey;
 
+    /** @var array */
     private $query;
 
     /**
@@ -72,8 +74,7 @@ class PlaceSearch
 
         $json = json_decode($response->getBody());
         
-        $geocodingResult = new GeocodeResult;
-        $geocodingResult->setResults( count($json->results) ? $json->results[0] : null );
-        return $geocodingResult;
+        return (new GeocodeResult)
+            ->setResults(count($json->results) ? $json->results[0] : null);
     }
 }
