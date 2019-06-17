@@ -1,7 +1,7 @@
 {
     "name": "teamzac/geocoder",
     "description": "A simple wrapper about Google's geocoding and direction services",
-    "version": "3.0.0",
+    "version": "4.0.1",
     "type": "project",
     "license": "MIT",
     "require": {

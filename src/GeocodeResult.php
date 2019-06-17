@@ -6,9 +6,16 @@ class GeocodeResult
 {
     private $result;
 
+    /** 
+     * Store the API results 
+     *
+     * @param   array $results
+     * @return  $this
+     */
     public function setResults($results)
     {
         $this->result = $results;
+        return $this;
     }
 
     public function getStreetNumber()
