@@ -16,11 +16,11 @@ class GeocoderServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/config.php' => config_path('geocoder.php')
+                __DIR__.'/../config/geocoder.php' => config_path('geocoder.php'),
             ], 'geocoding-config');
 
             $this->mergeConfigFrom(
-                __DIR__.'/config.php', 'geocoder'
+                __DIR__.'/../config/geocoder.php', 'geocoder'
             );
 
             $this->commands([
@@ -39,14 +39,6 @@ class GeocoderServiceProvider extends ServiceProvider
     {
         $this->app->singleton(Geocoder::class, function($app) {
             return new Geocoder(config('geocoder.google_maps_api_key'));
-        });
-
-        $this->app->singleton(PlaceSearch::class, function($app) {
-            return new PlaceSearch(config('geocoder.google_maps_api_key'));
-        });
-
-        $this->app->singleton(PlaceDetails::class, function($app) {
-            return new PlaceDetails(config('geocoder.google_maps_api_key'));
         });
     }
 }

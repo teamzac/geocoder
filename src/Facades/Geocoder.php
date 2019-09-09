@@ -9,11 +9,11 @@ use TeamZac\Geocoder\Geocoder as ConcreteGeocoder;
 class Geocoder extends Facade
 {
     /**
-     * Replace the bound instance with a fake
+     * Replace the bound instance with a fake.
      * 
-     * @return  TeamZac\Geocoder\FakeGeocoder
+     * @return TeamZac\Geocoder\FakeGeocoder
      */
-    public static function fake($fakeResponse = null)
+    public static function fake($fakeResponse = [])
     {
         static::swap($fake = new FakeGeocoder($fakeResponse));
 
@@ -24,5 +24,8 @@ class Geocoder extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return ConcreteGeocoder::class; }
+    protected static function getFacadeAccessor() 
+    { 
+        return ConcreteGeocoder::class; 
+    }
 }

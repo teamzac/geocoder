@@ -10,23 +10,20 @@ class FakeGeocoder
     protected $response;
 
     /**
-     * Create a fake geocoder, optionally providing a default response to return
+     * Create a fake geocoder, optionally providing a default response to return.
      * 
-     * @param   array $fakeResponse
+     * @param array $fakeResponse
      */
-    public function __construct($fakeResponse = null)
+    public function __construct($fakeResponse = [])
     {
-        if (is_array($fakeResponse)) {
-            $this->response = $fakeResponse;
-        } else {
-            $this->prepareFakeResponse();
-        }
+        $this->setFakeResponse($fakeResponse);
     }
 
     /**
-     * Geocode the given address
+     * Geocode the given address.
      *
      * @param string $address
+     *
      * @return this
      */
     public function geocode($address='')
@@ -35,10 +32,11 @@ class FakeGeocoder
     }
 
     /**
-     * Reverse geocode given the latitude/longitude pair
+     * Reverse geocode given the latitude/longitude pair.
      *
      * @param   double $lat
      * @param   double $lng
+     *
      * @return  this
      */
     public function reverseGeocode($lat, $lng)
@@ -46,68 +44,59 @@ class FakeGeocoder
         return $this->getResults();
     }
 
-    /**
-     * 
-     * 
-     * @param   
-     * @return  
-     */
     protected function getResults()
     {
-        return (new GeocodeResult)->setResults(
-            json_decode(json_encode($this->response))
-        );
+        return GeocodeResult::make(json_decode(json_encode($this->response)));
     }
 
     /**
-     * Prepare a fake response
+     * Prepare a fake response.
      * 
-     * @param   
-     * @return  
+     * @param  array $overrides
      */
-    protected function prepareFakeResponse()
+    protected function setFakeResponse($overrides = [])
     {
-        $this->response = [
+        $this->response = array_merge([
             'address_components' => [
                 [
                     'long_name' => '123',
-                    'types' => ['street_number'],
+                    'types'     => ['street_number'],
                 ],
                 [
                     'long_name' => 'Main Street',
-                    'types' => ['route'],
+                    'types'     => ['route'],
                 ],
                 [
                     'long_name' => 'Anywhere',
-                    'types' => ['locality'],
+                    'types'     => ['locality'],
                 ],
                 [
                     'long_name' => 'Somewhere County',
-                    'types' => ['administrative_area_level_2'],
+                    'types'     => ['administrative_area_level_2'],
                 ],
                 [
-                    'long_name' => 'Texas',
-                    'short_name' => 'TX',
-                    'types' => ['administrative_area_level_1'],
+                    'long_name'     => 'Texas',
+                    'short_name'    => 'TX',
+                    'types'         => ['administrative_area_level_1'],
                 ],
                 [
-                    'long_name' => 'United States',
-                    'short_name' => 'US',
-                    'types' => ['country'],
+                    'long_name'     => 'United States',
+                    'short_name'    => 'US',
+                    'types'         => ['country'],
                 ],
                 [
                     'long_name' => '77777',
-                    'types' => ['postal_code'],
+                    'types'     => ['postal_code'],
                 ],
             ],
             'formatted_address' => '123 Main Street, Anywhere, TX 77777 USA',
-            'geometry' => [
+            'geometry'          => [
                 'location' => [
                     'lat' => 32.000,
-                    'lng' => -97.000
+                    'lng' => -97.000,
                 ]
             ],
             'place_id' => Str::random(20),
-        ];
+        ], $overrides);
     }
 }

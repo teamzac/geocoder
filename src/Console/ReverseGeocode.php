@@ -30,9 +30,9 @@ class ReverseGeocode extends Command
     {
         list($lat, $lng) = explode(',', $this->argument('latlng'));
 
-        $result = app(Geocoder::class)->reverseGeocode( $lat, $lng );
+        $result = app(Geocoder::class)->reverseGeocode($lat, $lng);
 
-        $this->info('Geocoding Results for Lat/Lng: ' . $lat .'/'. $lng);
-        $this->info('Address: ' . $result->getFormattedAddress());
+        $this->info('Geocoding Results for Lat/Lng: '.$lat.'/'.$lng);
+        $this->info('Address: '.$result->getFormattedAddress());
     }
 }

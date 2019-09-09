@@ -6,11 +6,17 @@ class GeocodeResult
 {
     private $result;
 
+    public static function make($result)
+    {
+        return (new static)->setResults($result);
+    }
+
     /** 
-     * Store the API results 
+     * Store the API results.
      *
-     * @param   array $results
-     * @return  $this
+     * @param array $results
+     *
+     * @return $this
      */
     public function setResults($results)
     {
@@ -75,17 +81,15 @@ class GeocodeResult
 
     private function getValueForKey($key)
     {
-        foreach ($this->result->address_components as $component)
-        {
-            if ( in_array($key, $component->types))
-            {
+        foreach ($this->result->address_components as $component) {
+            if (in_array($key, $component->types)) {
                 return $component->long_name;
             }
         }
     }
 
     public function __get($key) {
-        if ( isset($this->result->{$key}) ) {
+        if (isset($this->result->{$key})) {
             return $this->result->{$key};
         }
     }

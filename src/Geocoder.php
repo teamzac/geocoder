@@ -3,19 +3,20 @@
 namespace TeamZac\Geocoder;
 
 use GuzzleHttp\Client;
+use TeamZac\Geocoder\Exceptions\NoGeocodingResultReturned;
 
 class Geocoder
 {
     /** @var string */
     protected $apiKey;
 
-    /** @var array */
+    /** @var GeocodingQuery */
     private $query;
 
     /**
-     * Construct the object
+     * Construct the object.
      *
-     * @param   string $apiKey
+     * @param string $apiKey
      */
     public function __construct($apiKey)
     {
@@ -23,53 +24,53 @@ class Geocoder
     }
 
     /**
-     * Geocode the given address
+     * Geocode the given address.
      *
      * @param string $address
+     * 
      * @return this
      */
     public function geocode($address='')
     {
-        $this->query = [
-            'address' => $address,
-            'key' => $this->apiKey,
-        ];
+        $this->query = GeocodingQuery::geocode($address, $this->apiKey);
         return $this->getResults();
     }
 
     /**
-     * Reverse geocode given the latitude/longitude pair
+     * Reverse geocode given the latitude/longitude pair.
      *
      * @param   double $lat
      * @param   double $lng
+     *
      * @return  this
      */
     public function reverseGeocode($lat, $lng)
     {
-        $this->query = [
-            'latlng' => "{$lat},{$lng}",
-            'key' => $this->apiKey
-        ];
+        $this->query = GeocodingQuery::reverseGeocode($lat, $lng, $this->apiKey);
         return $this->getResults();
     }
 
     /**
-     * Query the geocoding service (Google)
+     * Query the geocoding service (Google).
      *
      * @return GeocodingResult
      */
     protected function getResults()
     {
         $apiResponse = $this->performQuery();
+
+        if (!isset($apiResponse->results) || count($apiResponse->results) == 0) {
+            throw NoGeocodingResultReturned::forQueryParams($this->query->getParams());
+        }
         
-        return (new GeocodeResult)
-            ->setResults(count($apiResponse->results) ? $apiResponse->results[0] : null);
+        return GeocodeResult::make($apiResponse->results[0]);
     }
 
     /**
-     * Query the API service
+     * Query the API service.
      * 
      * @return  JSON parsed object
+     *
      * @throws  Exception
      */
     protected function performQuery()
@@ -78,27 +79,27 @@ class Geocoder
             'headers' => [
                 'Accept'     => 'application/json',
             ],
-            'query' => $this->query,
+            'query' => $this->query->toArray(),
         ]);
 
-        if ( $response->getStatusCode() >= 400 ) {
+        if ($response->getStatusCode() >= 400) {
             throw new \Exception('Unable to process Geocoding');
         }
 
-        return json_decode($response->getBody());;
+        return json_decode($response->getBody());
     }
 
     /**
-     * Create the HTTP client
+     * Create the HTTP client.
      * 
      * @return  GuzzleHttp\Client
      */
     protected function http()
     {
         return new Client([
-            'base_uri' => 'https://maps.googleapis.com/maps/api/geocode/json',
-            'timeout'  => 10.0,
-            'stream' => false,
+            'base_uri'  => 'https://maps.googleapis.com/maps/api/geocode/json',
+            'timeout'   => 10.0,
+            'stream'    => false,
         ]);
     }
 }

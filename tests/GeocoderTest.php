@@ -1,9 +1,12 @@
 <?php
 
+namespace TeamZac\Geocoder\Test;
+
 use TeamZac\Geocoder\Geocoder;
 use TeamZac\Geocoder\GeocodeResult;
+use TeamZac\Geocoder\Exceptions\NoGeocodingResultReturned;
 
-class GeocoderTest extends PHPUnit\Framework\TestCase
+class GeocoderTest extends TestCase
 {
     protected $apiKey;
 
@@ -13,10 +16,11 @@ class GeocoderTest extends PHPUnit\Framework\TestCase
 
     protected $queryLng;
 
-    function setUp()
+    public function setUp(): void
     {
-        $env = require( dirname(__DIR__) . '/.env');
-        $this->apiKey = $env['apiKey'];
+        parent::setUp();
+
+        $this->geocoder = new Geocoder($this->app['config']['geocoder.google_maps_api_key']);
 
         $this->queryAddress = '1600 Pennsylvania Avenue, Washington, DC 20500';
 
@@ -25,11 +29,9 @@ class GeocoderTest extends PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    function it_geocodes_an_address()
+    public function it_geocodes_an_address()
     {
-        $geocoder = new Geocoder($this->apiKey);
-
-        $results = $geocoder->geocode($this->queryAddress);
+        $results = $this->geocoder->geocode($this->queryAddress);
 
         $this->assertTrue($results instanceof GeocodeResult);
 
@@ -38,11 +40,9 @@ class GeocoderTest extends PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    function it_reverse_geocodes_a_lat_lng_pair()
+    public function it_reverse_geocodes_a_lat_lng_pair()
     {
-        $geocoder = new Geocoder($this->apiKey);
-
-        $results = $geocoder->reverseGeocode($this->queryLat, $this->queryLng);
+        $results = $this->geocoder->reverseGeocode($this->queryLat, $this->queryLng);
 
         $this->assertTrue($results instanceof GeocodeResult);
 
@@ -50,4 +50,17 @@ class GeocoderTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($this->queryLng, $results->getLng());
     }
 
+    /** @test */
+    public function an_exception_is_thrown_when_no_results_are_returned()
+    {
+        $invalidAddress = '100 Does Not Exist, Nowhere, XY 12345';
+
+        try {
+            $results = $this->geocoder->geocode($invalidAddress);
+        } catch (NoGeocodingResultReturned $e) {
+            $this->assertSame($invalidAddress, $e->getParams()['address']);
+            return;
+        }
+        $this->fail('No exception was thrown, even though no results were returned');
+    }
 }
