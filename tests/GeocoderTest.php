@@ -59,6 +59,7 @@ class GeocoderTest extends TestCase
             $results = $this->geocoder->geocode($invalidAddress);
         } catch (NoGeocodingResultReturned $e) {
             $this->assertSame($invalidAddress, $e->getParams()['address']);
+
             return;
         }
         $this->fail('No exception was thrown, even though no results were returned');

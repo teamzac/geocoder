@@ -10,7 +10,7 @@ class Geocoder extends Facade
 {
     /**
      * Replace the bound instance with a fake.
-     * 
+     *
      * @return TeamZac\Geocoder\FakeGeocoder
      */
     public static function fake($fakeResponse = [])
@@ -19,13 +19,14 @@ class Geocoder extends Facade
 
         return $fake;
     }
+
     /**
      * Get the registered name of the component.
      *
      * @return string
      */
-    protected static function getFacadeAccessor() 
-    { 
-        return ConcreteGeocoder::class; 
+    protected static function getFacadeAccessor()
+    {
+        return ConcreteGeocoder::class;
     }
 }

@@ -11,7 +11,7 @@ class FakeGeocoder
 
     /**
      * Create a fake geocoder, optionally providing a default response to return.
-     * 
+     *
      * @param array $fakeResponse
      */
     public function __construct($fakeResponse = [])
@@ -26,7 +26,7 @@ class FakeGeocoder
      *
      * @return this
      */
-    public function geocode($address='')
+    public function geocode($address = '')
     {
         return $this->getResults();
     }
@@ -34,8 +34,8 @@ class FakeGeocoder
     /**
      * Reverse geocode given the latitude/longitude pair.
      *
-     * @param   double $lat
-     * @param   double $lng
+     * @param   float $lat
+     * @param   float $lng
      *
      * @return  this
      */
@@ -51,7 +51,7 @@ class FakeGeocoder
 
     /**
      * Prepare a fake response.
-     * 
+     *
      * @param  array $overrides
      */
     protected function setFakeResponse($overrides = [])
@@ -94,7 +94,7 @@ class FakeGeocoder
                 'location' => [
                     'lat' => 32.000,
                     'lng' => -97.000,
-                ]
+                ],
             ],
             'place_id' => Str::random(20),
         ], $overrides);

@@ -5,7 +5,7 @@ namespace TeamZac\Geocoder\Console;
 use TeamZac\Geocoder\Geocoder;
 use Illuminate\Console\Command;
 
-class Geocode extends Command 
+class Geocode extends Command
 {
     /**
      * The name and signature of the console command.
