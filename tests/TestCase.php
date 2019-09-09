@@ -9,7 +9,7 @@ class TestCase extends OrchestraTestCase
     protected function getPackageProviders($app)
     {
         return [
-            'TeamZac\Geocoder\GeocoderServiceProvider'
+            'TeamZac\Geocoder\GeocoderServiceProvider',
         ];
     }
 

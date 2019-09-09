@@ -25,10 +25,10 @@ class GeocodingQuery
     }
 
     /**
-     * @var array $params
+     * @var array
      * @var string $apiKey
      */
-    public function __construct(array $params, string $apiKey) 
+    public function __construct(array $params, string $apiKey)
     {
         $this->params = $params;
         $this->apiKey = $apiKey;

@@ -15,6 +15,7 @@ class NoGeocodingResultReturned extends \Exception
     public function setParams($params)
     {
         $this->params = $params;
+
         return $this;
     }
 

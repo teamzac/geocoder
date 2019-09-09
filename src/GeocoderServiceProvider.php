@@ -6,7 +6,6 @@ use Illuminate\Support\ServiceProvider;
 
 class GeocoderServiceProvider extends ServiceProvider
 {
-    
     /**
      * Bootstrap the application services.
      *
@@ -37,7 +36,7 @@ class GeocoderServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(Geocoder::class, function($app) {
+        $this->app->singleton(Geocoder::class, function ($app) {
             return new Geocoder(config('geocoder.google_maps_api_key'));
         });
     }

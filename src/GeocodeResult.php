@@ -11,7 +11,7 @@ class GeocodeResult
         return (new static)->setResults($result);
     }
 
-    /** 
+    /**
      * Store the API results.
      *
      * @param array $results
@@ -21,6 +21,7 @@ class GeocodeResult
     public function setResults($results)
     {
         $this->result = $results;
+
         return $this;
     }
 
@@ -88,7 +89,8 @@ class GeocodeResult
         }
     }
 
-    public function __get($key) {
+    public function __get($key)
+    {
         if (isset($this->result->{$key})) {
             return $this->result->{$key};
         }

@@ -27,26 +27,28 @@ class Geocoder
      * Geocode the given address.
      *
      * @param string $address
-     * 
+     *
      * @return this
      */
-    public function geocode($address='')
+    public function geocode($address = '')
     {
         $this->query = GeocodingQuery::geocode($address, $this->apiKey);
+
         return $this->getResults();
     }
 
     /**
      * Reverse geocode given the latitude/longitude pair.
      *
-     * @param   double $lat
-     * @param   double $lng
+     * @param   float $lat
+     * @param   float $lng
      *
      * @return  this
      */
     public function reverseGeocode($lat, $lng)
     {
         $this->query = GeocodingQuery::reverseGeocode($lat, $lng, $this->apiKey);
+
         return $this->getResults();
     }
 
@@ -59,16 +61,16 @@ class Geocoder
     {
         $apiResponse = $this->performQuery();
 
-        if (!isset($apiResponse->results) || count($apiResponse->results) == 0) {
+        if (! isset($apiResponse->results) || count($apiResponse->results) == 0) {
             throw NoGeocodingResultReturned::forQueryParams($this->query->getParams());
         }
-        
+
         return GeocodeResult::make($apiResponse->results[0]);
     }
 
     /**
      * Query the API service.
-     * 
+     *
      * @return  JSON parsed object
      *
      * @throws  Exception
@@ -91,7 +93,7 @@ class Geocoder
 
     /**
      * Create the HTTP client.
-     * 
+     *
      * @return  GuzzleHttp\Client
      */
     protected function http()

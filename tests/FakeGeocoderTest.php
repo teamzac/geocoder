@@ -22,7 +22,7 @@ class FakeGeocoderTest extends TestCase
         Geocoder::fake([
             'formatted_address' => 'My custom address',
         ]);
-        
+
         $result = Geocoder::geocode('Random address');
 
         $this->assertSame('My custom address', $result->getFormattedAddress());

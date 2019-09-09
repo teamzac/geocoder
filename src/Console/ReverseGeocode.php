@@ -5,7 +5,7 @@ namespace TeamZac\Geocoder\Console;
 use TeamZac\Geocoder\Geocoder;
 use Illuminate\Console\Command;
 
-class ReverseGeocode extends Command 
+class ReverseGeocode extends Command
 {
     /**
      * The name and signature of the console command.
@@ -28,7 +28,7 @@ class ReverseGeocode extends Command
      */
     public function handle()
     {
-        list($lat, $lng) = explode(',', $this->argument('latlng'));
+        [$lat, $lng] = explode(',', $this->argument('latlng'));
 
         $result = app(Geocoder::class)->reverseGeocode($lat, $lng);
 
